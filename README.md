@@ -1,1 +1,2 @@
 # Spielauswertung
+# Author: Jana Gumbert
