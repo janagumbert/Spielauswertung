@@ -17,17 +17,21 @@ public:
 	void update(float deltaT, ofVec2f attractor);
 	void draw();
 
-	//float getAgeNorm();
+	float getAgeNorm();
 
 private:
 	ofColor color;      //Farbe
 	float size;         //Größe
 	float mass;         //Masse
+	bool time;
 
 	ofVec2f velocity;   //Geschwindigkeit
+	ofVec2f velocity2;   //Geschwindigkeit
 	ofVec2f position;   //Position
 
 	float maxLife;         //Leben
 	float age;          // Wie alt darf er werden
+
+	vector<theParticle*> system;
 };
 #endif 

@@ -37,7 +37,8 @@ private:
 	vector<ofVec2f>attractors;
 	vector<theParticle*> system;
 	float birthCount;
-	//int age;
+	int age;
+	ofColor color;
 
 	ofImage fileImage;
 	

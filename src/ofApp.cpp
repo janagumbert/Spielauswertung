@@ -6,25 +6,24 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 
-	ofSetBackgroundColor(0, 0, 0);	
+	ofSetBackgroundColor(0, 0, 0);
 	ofSetFrameRate(60);
 	//birthCount = 0;
 
-	fileImage.loadImage("Danial_Silhouette.png");
+	fileImage.loadImage("FINAL.png");
 
 	attractors = pixelInVector(fileImage);
 }
-	
+
 
 //--------------------------------------------------------------
 void ofApp::update() {
 
 	double deltaT = ofGetLastFrameTime();
-	//birthCount += deltaT;
-	//age += deltaT;
 
-	if (/*birthCount > .001 && (*/system.size()/* + 2)*/ < MAXNUMPARTICELS/5) {
-		
+
+	if (/*birthCount > .001 && (*/system.size()/* + 2)*/ < MAXNUMPARTICELS / 9) {
+
 		for (int i = 0; i < 50; i++) {    //erzeugt pro frame 50 neue partikel an zufälliger Stelle
 			system.push_back(new theParticle);
 
@@ -34,29 +33,30 @@ void ofApp::update() {
 			system.back()->setup(ofVec2f(x, y));
 		}
 
-	//	birthCount = 0;
 	}
 
 	for (int p = 0; p < system.size();) {
 
-		if (p * 10 < attractors.size()) {  
-			system.at(p)->update(deltaT, attractors[p * 10]);//wie genau wird img gezeichnet(jedes 10. pixel)
-		
-		}
-		/*
-		else if (age >= maxLife) {
-			system.at(p)->update(deltaT, ofVec2f(0,0));
 
-		}*/
+		if (p * 10 < attractors.size()) {
+			
+			if (time == false) {
+				system.at(p)->update(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight()))); //Partikel werden an beliebige stelle gezogen
+			}
+			else
+			{
+				system.at(p)->update(deltaT, attractors[p * 10]);//wie genau wird img gezeichnet(jedes 10. pixel)
+			}
+		}
 		else {
 
 			system.at(p)->update(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight()))); //Partikel werden an beliebige stelle gezogen
-
 		}
-		
-		
+
+
+
 		p++;
-	
+
 	}
 }
 
@@ -66,7 +66,6 @@ void ofApp::draw() {
 	for (int i = 0; i < system.size(); i++) {
 		system.at(i)->draw();
 	}
-	
 }
 
 vector<ofVec2f> ofApp::pixelInVector(ofImage a) {
@@ -85,7 +84,7 @@ vector<ofVec2f> ofApp::pixelInVector(ofImage a) {
 			int x = i / 4 % width;
 
 			ofVec2f vec;
-			vec.set(x+((ofGetWidth()/2)-picWidth/2), y+((ofGetHeight()/2)-picHeight/2));
+			vec.set(x + ((ofGetWidth() / 2) - picWidth / 2), y + ((ofGetHeight() / 2) - picHeight / 2));
 
 			pxPos.push_back(vec);
 		}
@@ -118,7 +117,7 @@ void ofApp::mouseDragged(int x, int y, int button) {
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button) {
-	
+
 }
 
 //--------------------------------------------------------------
