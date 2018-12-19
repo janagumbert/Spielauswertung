@@ -7,7 +7,7 @@
 #include "ofTrueTypeFont.h"
 #include "ofxCv.h"
 
-#define MAXNUMPARTICELS 37126
+//#define MAXNUMPARTICELS 37126
 
 //#define maxLife 10
 
@@ -42,4 +42,5 @@ private:
 
 	ofImage fileImage;
 	
+	int picPix;
 };

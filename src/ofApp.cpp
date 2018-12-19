@@ -10,7 +10,7 @@ void ofApp::setup() {
 	ofSetFrameRate(60);
 	//birthCount = 0;
 
-	fileImage.loadImage("FINAL.png");
+	fileImage.loadImage("engineer.png");
 
 	attractors = pixelInVector(fileImage);
 }
@@ -22,7 +22,7 @@ void ofApp::update() {
 	double deltaT = ofGetLastFrameTime();
 
 
-	if (/*birthCount > .001 && (*/system.size()/* + 2)*/ < MAXNUMPARTICELS / 9) {
+	if (/*birthCount > .001 && (*/system.size()/* + 2)*/ < picPix/7 +120) {
 
 		for (int i = 0; i < 50; i++) {    //erzeugt pro frame 50 neue partikel an zufälliger Stelle
 			system.push_back(new theParticle);
@@ -38,14 +38,14 @@ void ofApp::update() {
 	for (int p = 0; p < system.size();) {
 
 
-		if (p * 10 < attractors.size()) {
+		if (p * 7 < attractors.size()) {
 			
 			if (time == false) {
 				system.at(p)->update(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight()))); //Partikel werden an beliebige stelle gezogen
 			}
 			else
 			{
-				system.at(p)->update(deltaT, attractors[p * 10]);//wie genau wird img gezeichnet(jedes 10. pixel)
+				system.at(p)->update(deltaT, attractors[p * 7]);//wie genau wird img gezeichnet(jedes 10. pixel)
 			}
 		}
 		else {
@@ -87,6 +87,8 @@ vector<ofVec2f> ofApp::pixelInVector(ofImage a) {
 			vec.set(x + ((ofGetWidth() / 2) - picWidth / 2), y + ((ofGetHeight() / 2) - picHeight / 2));
 
 			pxPos.push_back(vec);
+
+			picPix++;
 		}
 	}
 

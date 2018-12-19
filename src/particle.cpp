@@ -17,7 +17,7 @@ void theParticle::setup(ofVec2f position) {
 	maxLife = 10.0;          //Wie lange der Partikel maximal leben soll
 	time = true;
 
-	size = ofRandom(0.5, 3);
+	size = ofRandom(0.5, 2);
 	mass = ofRandom(100, 200); //verändert die PArtikelgeschwindigkeit
 
 	color.set(ofRandom(0, 255), ofRandom(0, 255), ofRandom(0, 255));
