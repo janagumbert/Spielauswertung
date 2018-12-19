@@ -9,7 +9,6 @@
 
 #define MAXNUMPARTICELS 37126
 
-//#define maxLife 10
 
 class ofApp : public ofBaseApp {
 

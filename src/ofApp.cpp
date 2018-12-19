@@ -11,7 +11,7 @@ void ofApp::setup() {
 	//birthCount = 0;
 
 	fileImage.loadImage("FINAL.png");
-
+	
 	attractors = pixelInVector(fileImage);
 }
 
@@ -20,7 +20,6 @@ void ofApp::setup() {
 void ofApp::update() {
 
 	double deltaT = ofGetLastFrameTime();
-
 
 	if (/*birthCount > .001 && (*/system.size()/* + 2)*/ < MAXNUMPARTICELS / 9) {
 
@@ -32,14 +31,10 @@ void ofApp::update() {
 
 			system.back()->setup(ofVec2f(x, y));
 		}
-
 	}
 
 	for (int p = 0; p < system.size();) {
-
-
 		if (p * 10 < attractors.size()) {
-			
 			if (time == false) {
 				system.at(p)->update(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight()))); //Partikel werden an beliebige stelle gezogen
 			}
@@ -49,14 +44,9 @@ void ofApp::update() {
 			}
 		}
 		else {
-
 			system.at(p)->update(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight()))); //Partikel werden an beliebige stelle gezogen
 		}
-
-
-
 		p++;
-
 	}
 }
 
@@ -89,7 +79,6 @@ vector<ofVec2f> ofApp::pixelInVector(ofImage a) {
 			pxPos.push_back(vec);
 		}
 	}
-
 	return pxPos;
 }
 
