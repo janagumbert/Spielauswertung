@@ -13,7 +13,7 @@ public:
 	theParticle();
 	~theParticle();
 
-	void setup(ofVec2f position);
+	void setup(ofVec2f position, float maxAge);
 	void update(float deltaT, ofVec2f attractor);
 	void draw();
 
@@ -31,6 +31,7 @@ private:
 
 	float maxLife;         //Leben
 	float age;          // Wie alt darf er werden
+
 
 	vector<theParticle*> system;
 };

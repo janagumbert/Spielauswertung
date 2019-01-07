@@ -8,9 +8,9 @@ void ofApp::setup() {
 
 	ofSetBackgroundColor(0, 0, 0);
 	ofSetFrameRate(60);
-	//birthCount = 0;
-
-	fileImage.loadImage("engineer.png");
+	birthCount = 0;
+	maxParticle = 50;
+	fileImage.loadImage("FINAL.png");
 
 	attractors = pixelInVector(fileImage);
 }
@@ -20,28 +20,25 @@ void ofApp::setup() {
 void ofApp::update() {
 
 	double deltaT = ofGetLastFrameTime();
+	
+	if (system.size() < picPix/7 - 120) {
 
-
-	if (/*birthCount > .001 && (*/system.size()/* + 2)*/ < picPix/7 +120) {
-
-		for (int i = 0; i < 50; i++) {    //erzeugt pro frame 50 neue partikel an zufälliger Stelle
+		for (int i = 0; i < maxParticle; i++) {    //erzeugt pro frame 50 neue partikel an zufälliger Stelle
 			system.push_back(new theParticle);
 
 			int y = ofRandomHeight();
 			int x = ofRandomWidth();
 
-			system.back()->setup(ofVec2f(x, y));
+			system.back()->setup(ofVec2f(x, y), 20);  //maxAge auf 20 
 		}
 
 	}
 
 	for (int p = 0; p < system.size();) {
-
-
 		if (p * 7 < attractors.size()) {
 			
 			if (time == false) {
-				system.at(p)->update(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight()))); //Partikel werden an beliebige stelle gezogen
+				system.at(p)->update(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight()))); //Partikel werden an beliebige stelle gezogen				
 			}
 			else
 			{
@@ -49,15 +46,12 @@ void ofApp::update() {
 			}
 		}
 		else {
-
 			system.at(p)->update(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight()))); //Partikel werden an beliebige stelle gezogen
 		}
-
-
-
 		p++;
-
 	}
+
+
 }
 
 //--------------------------------------------------------------
@@ -103,8 +97,15 @@ void ofApp::keyPressed(int key) {
 }
 
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key) {
-
+void ofApp::keyReleased(int key) {			//alle Partikel sterben nach ablaufen des maxAge und wenn man eine Taste loslässt.
+	for (int p = 0; p < system.size();) {	//durchgehen der Partikel
+		if (system.at(p)->getAgeNorm() >= 1) {	//schauen ob maxAge erreicht
+			delete system.at(p);	
+			system.erase(system.begin() + p);	//löschen der Partikel
+		}
+		p++;
+	}
+	maxParticle =  0;			// damit keine neuen Partikel durch die update-Methode ersellt werden.
 }
 
 //--------------------------------------------------------------

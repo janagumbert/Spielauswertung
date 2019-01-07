@@ -1,17 +1,10 @@
-﻿  ofApp.cpp
-c:\users\danie\desktop\of_v0.10.1_vs2017_release\addons\ofxcv\libs\ofxcv\include\ofxcv\tracker.h(326): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
-c:\users\danie\desktop\of_v0.10.1_vs2017_release\apps\myapps\spielauswertung\src\ofapp.cpp(13): warning C4996: 'ofImage_<unsigned char>::loadImage': Use load instead
-  c:\users\danie\desktop\of_v0.10.1_vs2017_release\libs\openframeworks\graphics\ofimage.h(227): note: Siehe Deklaration von "ofImage_<unsigned char>::loadImage"
-c:\users\danie\desktop\of_v0.10.1_vs2017_release\apps\myapps\spielauswertung\src\ofapp.cpp(25): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
-c:\users\danie\desktop\of_v0.10.1_vs2017_release\apps\myapps\spielauswertung\src\ofapp.cpp(38): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
-c:\users\danie\desktop\of_v0.10.1_vs2017_release\apps\myapps\spielauswertung\src\ofapp.cpp(41): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
-c:\users\danie\desktop\of_v0.10.1_vs2017_release\apps\myapps\spielauswertung\src\ofapp.cpp(66): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
-c:\users\danie\desktop\of_v0.10.1_vs2017_release\apps\myapps\spielauswertung\src\ofapp.cpp(77): warning C4018: "<=": Konflikt zwischen "signed" und "unsigned"
-  particle.vcxproj -> C:\Users\danie\Desktop\of_v0.10.1_vs2017_release\apps\myApps\Spielauswertung\bin\particle_debug.exe
+﻿  particle.cpp
+c:\users\katon\desktop\projekt\of_v0.10.0_vs2017_release\of_v0.10.0_vs2017_release\addons\ofxcv\libs\ofxcv\include\ofxcv\tracker.h(326): warning C4018: '<': signed/unsigned mismatch
+  particle.vcxproj -> C:\Users\Katon\Desktop\Projekt\of_v0.10.0_vs2017_release\of_v0.10.0_vs2017_release\apps\myApps\Spielauswertung\bin\particle_debug.exe
   
-  	                   2	C:\Users\danie\Desktop\of_v0.10.1_vs2017_release\libs\fmodex\lib\vs\Win32\
-  	  *EXTRA Datei		 6018560	C:\Users\danie\Desktop\of_v0.10.1_vs2017_release\apps\myApps\Spielauswertung\bin\FreeImage.dll
+  	                   2	C:\Users\Katon\Desktop\Projekt\of_v0.10.0_vs2017_release\of_v0.10.0_vs2017_release\libs\fmodex\lib\vs\Win32\
+  	  *EXTRA Datei		 5647872	C:\Users\Katon\Desktop\Projekt\of_v0.10.0_vs2017_release\of_v0.10.0_vs2017_release\apps\myApps\Spielauswertung\bin\FreeImage.dll
   
-  	                   1	C:\Users\danie\Desktop\of_v0.10.1_vs2017_release\libs\FreeImage\lib\vs\Win32\
-  	  *EXTRA Datei		 1266176	C:\Users\danie\Desktop\of_v0.10.1_vs2017_release\apps\myApps\Spielauswertung\bin\fmodex.dll
-  	  *EXTRA Datei		 1312768	C:\Users\danie\Desktop\of_v0.10.1_vs2017_release\apps\myApps\Spielauswertung\bin\fmodexL.dll
+  	                   1	C:\Users\Katon\Desktop\Projekt\of_v0.10.0_vs2017_release\of_v0.10.0_vs2017_release\libs\FreeImage\lib\vs\Win32\
+  	  *EXTRA Datei		 1266176	C:\Users\Katon\Desktop\Projekt\of_v0.10.0_vs2017_release\of_v0.10.0_vs2017_release\apps\myApps\Spielauswertung\bin\fmodex.dll
+  	  *EXTRA Datei		 1312768	C:\Users\Katon\Desktop\Projekt\of_v0.10.0_vs2017_release\of_v0.10.0_vs2017_release\apps\myApps\Spielauswertung\bin\fmodexL.dll
