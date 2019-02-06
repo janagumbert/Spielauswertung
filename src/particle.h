@@ -14,7 +14,7 @@ public:
 	~theParticle();
 
 	void setup(ofVec2f position, float maxAge);
-	void update(float deltaT, ofVec2f attractor);
+	void update(float deltaT, ofVec2f attractor, bool deleteAttractor);
 	void draw();
 
 	float getAgeNorm();
@@ -23,7 +23,6 @@ private:
 	ofColor color;      //Farbe
 	float size;         //Größe
 	float mass;         //Masse
-	bool time;
 
 	ofVec2f velocity;   //Geschwindigkeit
 	ofVec2f velocity2;   //Geschwindigkeit
@@ -31,7 +30,6 @@ private:
 
 	float maxLife;         //Leben
 	float age;          // Wie alt darf er werden
-
 
 	vector<theParticle*> system;
 };

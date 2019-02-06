@@ -35,12 +35,11 @@ public:
 private:
 	vector<ofVec2f>attractors;
 	vector<theParticle*> system;
-	float birthCount;
 	int maxParticle;
-	
-	ofColor color;
 
 	ofImage fileImage;
 	
 	int picPix;
+	bool drawAttractor;
+	bool deleteAttractor;
 };

@@ -14,7 +14,6 @@ void theParticle::setup(ofVec2f position, float maxAge) {
 
 	age = 0.0;              //Alter ist am Anfang 0
 	maxLife = ofRandom(maxAge-5, maxAge);          //Wie lange der Partikel maximal leben soll
-	time = true;
 
 	size = ofRandom(0.5, 2);
 	mass = ofRandom(100, 200); //verändert die PArtikelgeschwindigkeit
@@ -23,8 +22,7 @@ void theParticle::setup(ofVec2f position, float maxAge) {
 	color.set(255, 255, 255);
 }
 
-
-void theParticle::update(float deltaT, ofVec2f attractor) //deltaT ist die Zeitintervall seit dem letzte Update
+void theParticle::update(float deltaT, ofVec2f attractor, bool deleteAttractor) //deltaT ist die Zeitintervall seit dem letzte Update
 {
 	age += deltaT;
 
@@ -42,19 +40,14 @@ void theParticle::update(float deltaT, ofVec2f attractor) //deltaT ist die Zeiti
 	velocity = mass * velocity.getNormalized(); //bleiben sonst nicht an attractor kleben 
 	position += (velocity * deltaT); //position = m/s * s [partikel bleiben statisch/bewegen sich nicht ohne]
 
-	if (age >= maxLife) {
-		time = false;
-//		color.set(ofColor(255, 50, 100));  //nach gewisser lebenszeit wird farbe geändert
-
-		attractor.set((ofRandom(0, ofGetWidth())), ofRandom(0, ofGetHeight() / 8));	//Attraktor wird neu gesetzt
+	if ((age >= maxLife) && (deleteAttractor == true)){
+		attractor.set((ofRandom(0, ofGetWidth())), ofRandom(0, ofGetHeight() / 8));	//Attraktor wird neu gesetzt !!!!!!!!!!!!!!!!!!!!!!!
 		ofVec2f force2 = attractor - position;	
 
 		velocity2 += force2 / 50;  // Bewegung zum Attraktor
 		velocity2 = (mass / 12)* velocity2.getNormalized(); //Bewegungsgeschwindigkeit hin zum Attraktor
-		position += (velocity2)/0,5; //position = m/s Partikel bleiben nicht statisch am attractor kleben
-		
+		position += (velocity2)*2; //position = m/s Partikel bleiben nicht statisch am attractor kleben		
 	}
-
 }
 
 void theParticle::draw() {
