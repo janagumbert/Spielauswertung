@@ -17,6 +17,7 @@ void ofApp::setup() {
 	birthCnt = 0;
 	sterben = false;
 	tornado = false;
+	tornadoFinished = false;
 	grenze.set(0, ofGetHeight() - 240);
 	grenze2.set(0, ofGetHeight() - 640);
 	life = true;
@@ -33,15 +34,15 @@ void ofApp::update() {
 	double deltaT = ofGetLastFrameTime();
 
 	//----------------------------------------
+
 	time += deltaT;
 
-	birthCnt += ofGetLastFrameTime();
+	//birthCnt += ofGetLastFrameTime();
 
 	if (birthCnt > 0.001 && status == -1) {
 		for (int i = 0; i < parAmount; i++) {
 			system.push_back(new particle02);
-			system.back()->setup(ofVec2f(ofRandom(0, ofGetWidth()), 0),20);
-			//            system.back()->status = 0; //hiermit greif ich auf den letzten Partikel in meinem Vektor "System" zu
+			system.back()->setup(ofVec2f(ofRandom(0, ofGetWidth()), 0), 20);
 			past1 = false;
 		}
 		birthCnt = 0;
@@ -59,39 +60,41 @@ void ofApp::update() {
 		}
 	}
 	updateTornado();
+	
+	//---------------------------------------
+	
 
-//---------------------------------------
+	if (system.size() < picPix / 7 + 100) {
 
+		for (int i = 0; i < maxParticle; i++) {    //erzeugt pro frame 50 neue partikel an zufälliger Stelle
+			system.push_back(new particle02);
 
-if (system.size() < picPix / 7 + 100) {
+			int y = ofRandomHeight();
+			int x = ofRandomWidth();
 
-	for (int i = 0; i < maxParticle; i++) {    //erzeugt pro frame 50 neue partikel an zufälliger Stelle
-		system.push_back(new particle02);
-
-		int y = ofRandomHeight();
-		int x = ofRandomWidth();
-
-		system.back()->setup(ofVec2f(x, y), 20);  //maxAge auf 20 
-	}
-
-}
-
-for (int p = 0; p < system.size();) {
-	if (p * 7 < attractors.size()) {
-
-		if (drawAttractor == false) {
-			system.at(p)->updateParticle(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight())), deleteAttractor, noAttractor, tornadoFinished); //Partikel werden an beliebige stelle gezogen				
+			system.back()->setup(ofVec2f(x, y), 20);  //maxAge auf 20
 		}
-		else
-		{
-			system.at(p)->updateParticle(deltaT, attractors[p * 7], deleteAttractor, noAttractor, tornadoFinished);//wie genau wird img gezeichnet(jedes 10. pixel)
+
+	}
+	
+
+	if (tornadoFinished == true) {
+		for (int p = 0; p < system.size();) {
+			if (p * 7 < attractors.size()) {
+				if (drawAttractor == false) {
+					system.at(p)->updateParticle(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight())), deleteAttractor, noAttractor, tornadoFinished); //Partikel werden an beliebige stelle gezogen				
+				}
+				else
+				{
+					system.at(p)->updateParticle(deltaT, attractors[p * 7], deleteAttractor, noAttractor, tornadoFinished);//wie genau wird img gezeichnet(jedes 10. pixel)
+				}
+			}
+			else {
+				system.at(p)->updateParticle(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight())), deleteAttractor, noAttractor, tornadoFinished); //Partikel werden an beliebige stelle gezogen
+			}
+			p++;
 		}
 	}
-	else {
-		system.at(p)->updateParticle(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight())), deleteAttractor, noAttractor, tornadoFinished); //Partikel werden an beliebige stelle gezogen
-	}
-	p++;
-}
 }
 
 //--------------------------------------------------------------
@@ -139,7 +142,7 @@ void ofApp::keyPressed(int key) {
 void ofApp::keyReleased(int key) {			//alle Partikel sterben nach ablaufen des maxAge und wenn man eine Taste loslässt.
 
 	//--------------------------------
-	
+
 	switch (key) {
 	case ' ':
 		for (int p = 0; p < system.size();) {	//durchgehen der Partikel
@@ -153,26 +156,24 @@ void ofApp::keyReleased(int key) {			//alle Partikel sterben nach ablaufen des m
 		break;
 	case 'a':
 		startTornado();
-		break;
-	case 't':
-		drawAttractor = false;		// setze des Booleans um den Bild-Attraktor zu setzen
-		noAttractor = false;
-		deleteAttractor = false;
-		tornadoFinished = true;
+		tornadoFinished = false;
 		break;
 	case 'd':
 		deleteAttractor = true;
 		noAttractor = false;
+		tornadoFinished = true;
 		break;
 
 	case 'f':
 		noAttractor = true;
 		deleteAttractor = false;
+		tornadoFinished = true;
 		break;
 	case 's':
 		drawAttractor = true;		// setze des Booleans um den Bild-Attraktor zu setzen
 		noAttractor = false;
 		deleteAttractor = false;
+		tornadoFinished = true;
 		break;
 	}
 }

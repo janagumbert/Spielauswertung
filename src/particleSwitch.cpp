@@ -14,31 +14,33 @@ particle02::~particle02() {
 
 void particle02::setup(ofVec2f pos, float maxAge) {
     
-    this->pos = pos;
-    vel.set(ofRandom(-40, 40), ofRandom(90,100));
-    color = 255;
-//    color = ofColor::goldenRod;
-    age = 0.0;
-    maxLife = 20.0;
-    
-    size = ofRandom(0.5,5);
+	this->pos = pos; //pointer auf Position ofVec2f position
+	vel.set(ofRandom(-20.0, 20.0), ofRandom(90, 100));// ofRandom(-20.0, 20.0));      //Die Bewegungsrichtung
+
+	age = 0.0;              //Alter ist am Anfang 0
+	maxLife = ofRandom(maxAge - 5, maxAge);          //Wie lange der Partikel maximal leben soll
+	size = ofRandom(0.5, 5);
+	mass = ofRandom(100, 200); //verändert die PArtikelgeschwindigkeit
+	color.set(0, 178, 255);
     
 }
 
 //--------------------------------------------------------------
 
 void particle02::updateParticle(double deltaT, ofVec2f attractor, bool deleteAttractor, bool noAttractor, bool tornadoFinished) {
-    pos += vel * deltaT;
-    age += deltaT;
-    
-    if (pos.x >= ofGetWidth()) {
-        pos.x = 0;
-    }
+	if (tornadoFinished == false) {
+		pos += vel * deltaT;
+		age += deltaT;
+
+		if (pos.x >= ofGetWidth()) {
+			pos.x = 0;
+		}
+	}
 
 //---------------------------------------------------------------
 	if (tornadoFinished == true) {
 		age += deltaT;
-
+		vel.set(ofRandom(-20.0, 20.0), 0);
 		ofVec2f force = attractor - pos; //Anziehungskraft
 
 		if (force.length() < 200) {   //force.length = abstand (partikel - attractor)
@@ -81,12 +83,8 @@ void particle02::updateParticle(double deltaT, ofVec2f attractor, bool deleteAtt
 //--------------------------------------------------------------
 
 void particle02::draw() {
-    ofSetColor(this->color /*, (1 - age/maxLife)*255*/ );
-    ofDrawCircle(pos , size);
-    //        ofDrawCircle(pos.x, pos.y , size);
-    //    float yPos = ofMap(sin(ofGetElapsedTimef()), -1, 1, 0, ofGetWidth());
-    //    ofRect(ofGetWidth()/2, 10,10, yPos);
-    
+    ofSetColor(this->color);
+    ofDrawCircle(pos , size);    
 }
 
 
