@@ -17,7 +17,8 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
-
+	std::cout << system.size() << std::endl;
+	
 	double deltaT = ofGetLastFrameTime();
 
 	if (system.size() < picPix / 7 + 100) {
@@ -113,7 +114,6 @@ void ofApp::keyReleased(int key) {			//alle Partikel sterben nach ablaufen des m
 	case 'f':
 		noAttractor = true;
 		deleteAttractor = false;
-		system.back()->setup(ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight())), 20);
 		break;
 	case 's':
 		drawAttractor = true;		// setze des Booleans um den Bild-Attraktor zu setzen
