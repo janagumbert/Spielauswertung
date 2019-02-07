@@ -9,7 +9,7 @@ void ofApp::setup() {
 	ofSetBackgroundColor(0, 0, 0);
 	ofSetFrameRate(60);
 	maxParticle = 50;
-	fileImage.loadImage("FINAL.png");
+	fileImage.loadImage("Ohm.png");
 
 	attractors = pixelInVector(fileImage);
 }
@@ -20,7 +20,7 @@ void ofApp::update() {
 
 	double deltaT = ofGetLastFrameTime();
 
-	if (system.size() < picPix / 7 - 120) {
+	if (system.size() < picPix / 7 + 100) {
 
 		for (int i = 0; i < maxParticle; i++) {    //erzeugt pro frame 50 neue partikel an zufälliger Stelle
 			system.push_back(new theParticle);
@@ -37,15 +37,15 @@ void ofApp::update() {
 		if (p * 7 < attractors.size()) {
 
 			if (drawAttractor == false) {
-				system.at(p)->update(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight())), deleteAttractor); //Partikel werden an beliebige stelle gezogen				
+				system.at(p)->update(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight())), deleteAttractor, noAttractor); //Partikel werden an beliebige stelle gezogen				
 			}
 			else
 			{
-				system.at(p)->update(deltaT, attractors[p * 7], deleteAttractor);//wie genau wird img gezeichnet(jedes 10. pixel)
+				system.at(p)->update(deltaT, attractors[p * 7], deleteAttractor, noAttractor);//wie genau wird img gezeichnet(jedes 10. pixel)
 			}
 		}
 		else {
-			system.at(p)->update(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight())), deleteAttractor); //Partikel werden an beliebige stelle gezogen
+			system.at(p)->update(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight())), deleteAttractor, noAttractor); //Partikel werden an beliebige stelle gezogen
 		}
 		p++;
 	}
@@ -56,6 +56,7 @@ void ofApp::draw() {
 
 	for (int i = 0; i < system.size(); i++) {
 		system.at(i)->draw();
+		i = i + 2;
 	}
 }
 
@@ -106,6 +107,18 @@ void ofApp::keyReleased(int key) {			//alle Partikel sterben nach ablaufen des m
 		break;
 	case 'd':
 		deleteAttractor = true;
+		noAttractor = false;
+		break;
+
+	case 'f':
+		noAttractor = true;
+		deleteAttractor = false;
+		system.back()->setup(ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight())), 20);
+		break;
+	case 's':
+		drawAttractor = true;		// setze des Booleans um den Bild-Attraktor zu setzen
+		noAttractor = false;
+		deleteAttractor = false;
 		break;
 	}
 }
@@ -127,7 +140,7 @@ void ofApp::mousePressed(int x, int y, int button) {
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button) {
-	drawAttractor = true;		// setze des Booleans um den Bild-Attraktor zu setzen
+
 }
 
 //--------------------------------------------------------------

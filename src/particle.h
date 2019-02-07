@@ -14,7 +14,7 @@ public:
 	~theParticle();
 
 	void setup(ofVec2f position, float maxAge);
-	void update(float deltaT, ofVec2f attractor, bool deleteAttractor);
+	void update(float deltaT, ofVec2f attractor, bool deleteAttractor, bool noAttractor);
 	void draw();
 
 	float getAgeNorm();

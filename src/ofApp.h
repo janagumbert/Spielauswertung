@@ -42,4 +42,5 @@ private:
 	int picPix;
 	bool drawAttractor;
 	bool deleteAttractor;
+	bool noAttractor;
 };
