@@ -12,44 +12,86 @@ void ofApp::setup() {
 	fileImage.loadImage("Ohm.png");
 
 	attractors = pixelInVector(fileImage);
+
+
+	birthCnt = 0;
+	sterben = false;
+	tornado = false;
+	grenze.set(0, ofGetHeight() - 240);
+	grenze2.set(0, ofGetHeight() - 640);
+	life = true;
+	parAmount = 3;
+	tornadoStartTime = -1000;
+	time = 0;
+	status = -1;
 }
 
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	std::cout << system.size() << std::endl;
-	
+
 	double deltaT = ofGetLastFrameTime();
 
-	if (system.size() < picPix / 7 + 100) {
+	//----------------------------------------
+	time += deltaT;
 
-		for (int i = 0; i < maxParticle; i++) {    //erzeugt pro frame 50 neue partikel an zufälliger Stelle
-			system.push_back(new theParticle);
+	birthCnt += ofGetLastFrameTime();
 
-			int y = ofRandomHeight();
-			int x = ofRandomWidth();
-
-			system.back()->setup(ofVec2f(x, y), 20);  //maxAge auf 20 
+	if (birthCnt > 0.001 && status == -1) {
+		for (int i = 0; i < parAmount; i++) {
+			system.push_back(new particle02);
+			system.back()->setup(ofVec2f(ofRandom(0, ofGetWidth()), 0),20);
+			//            system.back()->status = 0; //hiermit greif ich auf den letzten Partikel in meinem Vektor "System" zu
+			past1 = false;
 		}
-
+		birthCnt = 0;
 	}
 
-	for (int p = 0; p < system.size();) {
-		if (p * 7 < attractors.size()) {
+	for (int p = 0; p < system.size(); p++) {
+		particle02* partikel = system.at(p);
 
-			if (drawAttractor == false) {
-				system.at(p)->update(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight())), deleteAttractor, noAttractor); //Partikel werden an beliebige stelle gezogen				
-			}
-			else
-			{
-				system.at(p)->update(deltaT, attractors[p * 7], deleteAttractor, noAttractor);//wie genau wird img gezeichnet(jedes 10. pixel)
-			}
+		partikel->updateParticle(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight())), deleteAttractor, noAttractor, tornadoFinished);
+
+		if (system.at(p)->shallBeKilled()) {
+			delete system.at(p);
+			system.erase(system.begin() + p);
+			p--;
 		}
-		else {
-			system.at(p)->update(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight())), deleteAttractor, noAttractor); //Partikel werden an beliebige stelle gezogen
-		}
-		p++;
 	}
+	updateTornado();
+
+//---------------------------------------
+
+
+if (system.size() < picPix / 7 + 100) {
+
+	for (int i = 0; i < maxParticle; i++) {    //erzeugt pro frame 50 neue partikel an zufälliger Stelle
+		system.push_back(new particle02);
+
+		int y = ofRandomHeight();
+		int x = ofRandomWidth();
+
+		system.back()->setup(ofVec2f(x, y), 20);  //maxAge auf 20 
+	}
+
+}
+
+for (int p = 0; p < system.size();) {
+	if (p * 7 < attractors.size()) {
+
+		if (drawAttractor == false) {
+			system.at(p)->updateParticle(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight())), deleteAttractor, noAttractor, tornadoFinished); //Partikel werden an beliebige stelle gezogen				
+		}
+		else
+		{
+			system.at(p)->updateParticle(deltaT, attractors[p * 7], deleteAttractor, noAttractor, tornadoFinished);//wie genau wird img gezeichnet(jedes 10. pixel)
+		}
+	}
+	else {
+		system.at(p)->updateParticle(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight())), deleteAttractor, noAttractor, tornadoFinished); //Partikel werden an beliebige stelle gezogen
+	}
+	p++;
+}
 }
 
 //--------------------------------------------------------------
@@ -57,7 +99,7 @@ void ofApp::draw() {
 
 	for (int i = 0; i < system.size(); i++) {
 		system.at(i)->draw();
-		i = i + 2;
+		//i = i + 2;
 	}
 }
 
@@ -95,6 +137,9 @@ void ofApp::keyPressed(int key) {
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key) {			//alle Partikel sterben nach ablaufen des maxAge und wenn man eine Taste loslässt.
+
+	//--------------------------------
+	
 	switch (key) {
 	case ' ':
 		for (int p = 0; p < system.size();) {	//durchgehen der Partikel
@@ -105,6 +150,15 @@ void ofApp::keyReleased(int key) {			//alle Partikel sterben nach ablaufen des m
 			p++;
 		}
 		maxParticle = 0;	// damit keine neuen Partikel durch die update-Methode ersellt werden.
+		break;
+	case 'a':
+		startTornado();
+		break;
+	case 't':
+		drawAttractor = false;		// setze des Booleans um den Bild-Attraktor zu setzen
+		noAttractor = false;
+		deleteAttractor = false;
+		tornadoFinished = true;
 		break;
 	case 'd':
 		deleteAttractor = true;
@@ -120,6 +174,43 @@ void ofApp::keyReleased(int key) {			//alle Partikel sterben nach ablaufen des m
 		noAttractor = false;
 		deleteAttractor = false;
 		break;
+	}
+}
+
+//--------------------------------------------------------------
+void ofApp::startTornado() {
+	status = 0;
+	tornadoStartTime = time;
+	for (int p = 0; p < system.size(); p++) {
+		particle02* partikel = system.at(p);
+		partikel->startTornado();
+	}
+
+}
+
+//--------------------------------------------------------------
+void ofApp::updateTornado() {
+	switch (status) {
+	case 0:
+		if ((time - tornadoStartTime) > 1.9) {
+			status = 1;
+			for (int p = 0; p < system.size(); p++) {
+				particle02* partikel = system.at(p);
+				partikel->startStage1();
+			}
+		}
+		break;
+	case 1:
+		if ((time - tornadoStartTime) > 15) {
+			status = -1;
+		}
+		for (int p = 0; p < system.size(); p++) {
+			particle02* partikel = system.at(p);
+			partikel->updateStage1();
+		}
+		break;
+		//        case 2:
+		//            if ((pos.y ))
 	}
 }
 

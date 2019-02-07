@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "particle.h"
+#include "particleSwitch.h"
 
 #include "ofxOpenCv.h"
 #include "ofTrueTypeFont.h"
@@ -29,12 +29,14 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 
+	void startTornado();
+	void updateTornado();
+
 	vector <ofVec2f> pixelInVector(ofImage a);
 	
 
 private:
 	vector<ofVec2f>attractors;
-	vector<theParticle*> system;
 	int maxParticle;
 
 	ofImage fileImage;
@@ -43,4 +45,30 @@ private:
 	bool drawAttractor;
 	bool deleteAttractor;
 	bool noAttractor;
+	bool tornadoFinished;
+
+
+	//------------------------------------------
+	vector<particle02*> system;
+	ofVec2f grenze;
+	ofVec2f grenze2;
+	ofVec2f force;
+
+	float birthCnt;
+	float maxLife;
+	float parAmount;
+	float sine;
+	ofParameter<float> sinParam;
+
+	double time;
+	double tornadoStartTime;
+	int stat2;
+	int status;
+	bool past1;
+	bool life;
+	bool sterben;
+	bool bounce;
+	bool tornado;
+	float height;
+	float distance;
 };
