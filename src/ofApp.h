@@ -46,6 +46,7 @@ private:
 	bool deleteAttractor;
 	bool noAttractor;
 	bool tornadoFinished;
+	bool tornadoStarted;
 
 
 	//------------------------------------------

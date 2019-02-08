@@ -68,16 +68,13 @@ void particle02::updateParticle(double deltaT, ofVec2f attractor, bool deleteAtt
 			attractor.set((ofRandom(0, ofGetWidth())), ofRandom(0, ofGetHeight()));
 			ofVec2f force2 = attractor - pos;
 
-			velocity2 += force2 / 5;  // Bewegung zum Attraktor
+			velocity2 += force2 / 50;  // Bewegung zum Attraktor
 			velocity2 = (mass / 12)* velocity2.getNormalized(); //Bewegungsgeschwindigkeit hin zum Attraktor
 			pos += (velocity2) * 2; //position = m/s Partikel bleiben nicht statisch am attractor kleben		
 		}
 	}
 
 }
-
-
-
 
 
 //--------------------------------------------------------------
@@ -99,7 +96,7 @@ void particle02::startTornado() {
 //--------------------------------------------------------------
 
 void particle02::startStage1() {
-    vel.y = ofRandom(10, 25)*(-1);
+    vel.y = ofRandom(10, 50)*(-1);
 }
 
 //--------------------------------------------------------------

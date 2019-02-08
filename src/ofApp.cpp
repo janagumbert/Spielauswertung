@@ -13,7 +13,6 @@ void ofApp::setup() {
 
 	attractors = pixelInVector(fileImage);
 
-
 	birthCnt = 0;
 	sterben = false;
 	tornado = false;
@@ -21,7 +20,7 @@ void ofApp::setup() {
 	grenze.set(0, ofGetHeight() - 240);
 	grenze2.set(0, ofGetHeight() - 640);
 	life = true;
-	parAmount = 3;
+	parAmount = 5;
 	tornadoStartTime = -1000;
 	time = 0;
 	status = -1;
@@ -37,9 +36,7 @@ void ofApp::update() {
 
 	time += deltaT;
 
-	//birthCnt += ofGetLastFrameTime();
-
-	if (birthCnt > 0.001 && status == -1) {
+	if ((birthCnt >= 0) && (status == -1) && (tornadoFinished == false)) {
 		for (int i = 0; i < parAmount; i++) {
 			system.push_back(new particle02);
 			system.back()->setup(ofVec2f(ofRandom(0, ofGetWidth()), 0), 20);
@@ -47,24 +44,7 @@ void ofApp::update() {
 		}
 		birthCnt = 0;
 	}
-
-	for (int p = 0; p < system.size(); p++) {
-		particle02* partikel = system.at(p);
-
-		partikel->updateParticle(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight())), deleteAttractor, noAttractor, tornadoFinished);
-
-		if (system.at(p)->shallBeKilled()) {
-			delete system.at(p);
-			system.erase(system.begin() + p);
-			p--;
-		}
-	}
-	updateTornado();
-	
-	//---------------------------------------
-	
-
-	if (system.size() < picPix / 7 + 100) {
+	else if ((tornadoFinished == true) &&(system.size() < picPix / 7 + 100)) {
 
 		for (int i = 0; i < maxParticle; i++) {    //erzeugt pro frame 50 neue partikel an zufälliger Stelle
 			system.push_back(new particle02);
@@ -74,9 +54,9 @@ void ofApp::update() {
 
 			system.back()->setup(ofVec2f(x, y), 20);  //maxAge auf 20
 		}
-
 	}
 	
+	//---------------------------------------
 
 	if (tornadoFinished == true) {
 		for (int p = 0; p < system.size();) {
@@ -95,6 +75,20 @@ void ofApp::update() {
 			p++;
 		}
 	}
+	else {
+		for (int p = 0; p < system.size(); p++) {
+			particle02* partikel = system.at(p);
+
+			partikel->updateParticle(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight())), deleteAttractor, noAttractor, tornadoFinished);
+
+			if (system.at(p)->shallBeKilled()) {
+				delete system.at(p);
+				system.erase(system.begin() + p);
+				p--;
+			}
+		}
+		updateTornado();
+	}
 }
 
 //--------------------------------------------------------------
@@ -102,7 +96,9 @@ void ofApp::draw() {
 
 	for (int i = 0; i < system.size(); i++) {
 		system.at(i)->draw();
-		//i = i + 2;
+		if (tornadoFinished == true) {
+			i = i + 2;
+		}
 	}
 }
 
@@ -121,7 +117,7 @@ vector<ofVec2f> ofApp::pixelInVector(ofImage a) {
 			int x = i / 4 % width;
 
 			ofVec2f vec;
-			vec.set(x + ((ofGetWidth() / 2) - picWidth / 2), y + ((ofGetHeight() / 2) - picHeight / 2));
+			vec.set(x + ((ofGetWidth() / 2) - picWidth / 2), y + ((ofGetHeight()) - picHeight ));
 
 			pxPos.push_back(vec);
 
