@@ -103,8 +103,8 @@ void particle02::startStage1() {
 
 void particle02::updateStage1() {
     vel += ofVec2f(ofRandom(2,2.5), ofRandom(0.2, 0.3)*(-1));
-    color = ofColor::red;
-    float hue = ofMap( age, 100, maxLife, 155, 255 );
+    color.set(0, 178, 255);
+    float hue = ofMap( age, 0, maxLife*2, 178, 178 );
     color.setHue( hue );
     ofSetColor(color, (1 - age/maxLife)*255 );
 }

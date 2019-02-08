@@ -9,9 +9,9 @@ void ofApp::setup() {
 	ofSetBackgroundColor(0, 0, 0);
 	ofSetFrameRate(60);
 	maxParticle = 50;
-	fileImage.loadImage("Ohm.png");
-
-	attractors = pixelInVector(fileImage);
+	fileImage1.loadImage("Ohm.png");
+	fileImage2.loadImage("FINAL_Logo.png");
+	fileImage3.loadImage("DANKE_Runter.png");
 
 	birthCnt = 0;
 	sterben = false;
@@ -20,7 +20,7 @@ void ofApp::setup() {
 	grenze.set(0, ofGetHeight() - 240);
 	grenze2.set(0, ofGetHeight() - 640);
 	life = true;
-	parAmount = 5;
+	parAmount = 30;
 	tornadoStartTime = -1000;
 	time = 0;
 	status = -1;
@@ -40,11 +40,10 @@ void ofApp::update() {
 		for (int i = 0; i < parAmount; i++) {
 			system.push_back(new particle02);
 			system.back()->setup(ofVec2f(ofRandom(0, ofGetWidth()), 0), 20);
-			past1 = false;
 		}
 		birthCnt = 0;
 	}
-	else if ((tornadoFinished == true) &&(system.size() < picPix / 7 + 100)) {
+	/*else if ((tornadoFinished == true) && (system.size() < picPix / 7 + 100)) {
 
 		for (int i = 0; i < maxParticle; i++) {    //erzeugt pro frame 50 neue partikel an zufälliger Stelle
 			system.push_back(new particle02);
@@ -55,8 +54,21 @@ void ofApp::update() {
 			system.back()->setup(ofVec2f(x, y), 20);  //maxAge auf 20
 		}
 	}
-	
-	//---------------------------------------
+	else {
+		for (int p = picPix / 7 + 100; p > system.size(); p++) {
+			particle02* partikel = system.at(p);
+
+			partikel->updateParticle(deltaT, ofVec2f(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight())), deleteAttractor, noAttractor, tornadoFinished);
+
+			if (system.at(p)->shallBeKilled()) {
+				delete system.at(p);
+				system.erase(system.begin() + p);
+				p--;
+			}
+		}
+}*/
+
+//---------------------------------------
 
 	if (tornadoFinished == true) {
 		for (int p = 0; p < system.size();) {
@@ -96,7 +108,7 @@ void ofApp::draw() {
 
 	for (int i = 0; i < system.size(); i++) {
 		system.at(i)->draw();
-		if (tornadoFinished == true) {
+		if (tornadoFinished == true) {			// damit nicht jeder Bildpkt Partikel bekommt
 			i = i + 2;
 		}
 	}
@@ -117,7 +129,7 @@ vector<ofVec2f> ofApp::pixelInVector(ofImage a) {
 			int x = i / 4 % width;
 
 			ofVec2f vec;
-			vec.set(x + ((ofGetWidth() / 2) - picWidth / 2), y + ((ofGetHeight()) - picHeight ));
+			vec.set(x + ((ofGetWidth() / 2) - picWidth / 2), y + ((ofGetHeight()) - picHeight));
 
 			pxPos.push_back(vec);
 
@@ -165,7 +177,23 @@ void ofApp::keyReleased(int key) {			//alle Partikel sterben nach ablaufen des m
 		deleteAttractor = false;
 		tornadoFinished = true;
 		break;
-	case 's':
+		// ab hier laden der unterschiedlichen Bilder
+	case '1':							
+		attractors = pixelInVector(fileImage1);
+		drawAttractor = true;		// setze des Booleans um den Bild-Attraktor zu setzen
+		noAttractor = false;
+		deleteAttractor = false;
+		tornadoFinished = true;
+		break;
+	case '2':
+		attractors = pixelInVector(fileImage2);
+		drawAttractor = true;		// setze des Booleans um den Bild-Attraktor zu setzen
+		noAttractor = false;
+		deleteAttractor = false;
+		tornadoFinished = true;
+		break;
+	case '3':
+		attractors = pixelInVector(fileImage3);
 		drawAttractor = true;		// setze des Booleans um den Bild-Attraktor zu setzen
 		noAttractor = false;
 		deleteAttractor = false;
@@ -198,7 +226,7 @@ void ofApp::updateTornado() {
 		}
 		break;
 	case 1:
-		if ((time - tornadoStartTime) > 15) {
+		if ((time - tornadoStartTime) > 20) {
 			status = -1;
 		}
 		for (int p = 0; p < system.size(); p++) {

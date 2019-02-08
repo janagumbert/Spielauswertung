@@ -39,7 +39,9 @@ private:
 	vector<ofVec2f>attractors;
 	int maxParticle;
 
-	ofImage fileImage;
+	ofImage fileImage1;
+	ofImage fileImage2;
+	ofImage fileImage3;
 	
 	int picPix;
 	bool drawAttractor;
