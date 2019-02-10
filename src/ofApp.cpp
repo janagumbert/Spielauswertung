@@ -46,7 +46,7 @@ void ofApp::update() {
 	}
 	else if ((tornadoFinished == true) && (system.size() < picPix / 7)) {
 		int newPix = (picPix / 7) - system.size();
-		for (int i = 1; i <= newPix ; i++) {	// Durchgehen ab Partikel i = 1 da es kein Pixel 0 gibt
+		for (int i = 1; i <= newPix; i++) {	// Durchgehen ab Partikel i = 1 da es kein Pixel 0 gibt
 			system.push_back(new particle02);
 
 			int y = ofRandomHeight();
@@ -54,7 +54,7 @@ void ofApp::update() {
 
 			system.back()->setup(ofVec2f(x, y), 20);
 		}
-	}	
+	}
 	else if ((tornadoFinished == true) && (system.size() > picPix / 7)) {
 		int newPix = system.size() - (picPix / 7);
 		for (int i = 0; i <= newPix; i++) {	//durchgehen der Partikel
@@ -96,191 +96,188 @@ void ofApp::update() {
 		}
 		updateTornado();
 	}
-	}
+}
 
-	//--------------------------------------------------------------
-	void ofApp::draw() {
-		for (int i = 0; i < system.size(); i++) {
-			system.at(i)->draw();
-			if (tornadoFinished == true) {			// damit nicht jeder Bildpkt Partikel bekommt
-				if (danke == false) {
-					i = i + 2;
-				}
+//--------------------------------------------------------------
+void ofApp::draw() {
+	for (int i = 0; i < system.size(); i++) {
+		system.at(i)->draw();
+		if (tornadoFinished == true) {			// damit nicht jeder Bildpkt Partikel bekommt
+			if (danke == false) {
+				i = i + 2;
 			}
 		}
 	}
+}
 
-	vector<ofVec2f> ofApp::pixelInVector(ofImage a) {
-		int picWidth = a.getWidth();
-		int picHeight = a.getHeight();
-		ofPixels pix;
-		pix = a.getPixels();
-		vector<ofVec2f> pxPos;
-		picPix = 0;
-		for (int i = 3; i <= pix.size(); i += 4) {
-			if (pix[i] > 0) {
-				int width = pix.getWidth();
+vector<ofVec2f> ofApp::pixelInVector(ofImage a) {
+	int picWidth = a.getWidth();
+	int picHeight = a.getHeight();
+	ofPixels pix;
+	pix = a.getPixels();
+	vector<ofVec2f> pxPos;
+	picPix = 0;
+	for (int i = 3; i <= pix.size(); i += 4) {
+		if (pix[i] > 0) {
+			int width = pix.getWidth();
 
-				int y = i / 4 / width;
+			int y = i / 4 / width;
 
-				int x = i / 4 % width;
+			int x = i / 4 % width;
 
-				ofVec2f vec;
-				vec.set(x + ((ofGetWidth() / 2) - picWidth / 2), y + ((ofGetHeight()) - picHeight));
+			ofVec2f vec;
+			vec.set(x + ((ofGetWidth() / 2) - picWidth / 2), y + ((ofGetHeight()) - picHeight));
 
-				pxPos.push_back(vec);
+			pxPos.push_back(vec);
 
-				picPix++;
-			}
+			picPix++;
 		}
-		return pxPos;
 	}
+	return pxPos;
+}
 
 
-	//--------------------------------------------------------------
-	void ofApp::keyPressed(int key) {
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key) {
 
 
-	}
+}
 
-	//--------------------------------------------------------------
-	void ofApp::keyReleased(int key) {			//alle Partikel sterben nach ablaufen des maxAge und wenn man eine Taste loslässt.
+//--------------------------------------------------------------
+void ofApp::keyReleased(int key) {			//alle Partikel sterben nach ablaufen des maxAge und wenn man eine Taste loslässt.
 
-		//--------------------------------
+	//--------------------------------
 
-		switch (key) {
-		case ' ':
-			for (int p = 0; p < system.size();) {	//durchgehen der Partikel
-				if (system.at(p)->getAgeNorm() >= 1) {	//schauen ob maxAge erreicht
-					delete system.at(p);	// löschen des Partikel Obj.
-					system.erase(system.begin() + p);	//löschen der des Pointer auf Partikel
-				}
-				p++;
+	switch (key) {
+	case ' ':
+		for (int p = 0; p < system.size();) {	//durchgehen der Partikel
+			if (system.at(p)->getAgeNorm() >= 1) {	//schauen ob maxAge erreicht
+				delete system.at(p);	// löschen des Partikel Obj.
+				system.erase(system.begin() + p);	//löschen der des Pointer auf Partikel
 			}
-			maxParticle = 0;	// damit keine neuen Partikel durch die update-Methode ersellt werden.
-			break;
-		case 'a':
-			startTornado();
-			tornadoFinished = false;
-			break;
-		case 'd':
-			deleteAttractor = true;
-			noAttractor = false;
-			tornadoFinished = true;
-			break;
-
-		case 'f':
+			p++;
+		}
+		maxParticle = 0;	// damit keine neuen Partikel durch die update-Methode ersellt werden.
+		break;
+	case 'a':
+		startTornado();
+		tornadoFinished = false;
+		break;
+	case 'd':
+		deleteAttractor = true;
+		noAttractor = false;
+		tornadoFinished = true;
+		break;
+		/*case 'f':
 			noAttractor = true;
 			deleteAttractor = false;
 			tornadoFinished = true;
-			break;
-//----------------------------------------------------------------
-			// ab hier laden der unterschiedlichen Bilder
-		case '1':
-			attractors = pixelInVector(fileImage1);
-			drawAttractor = true;		// setze des Booleans um den Bild-Attraktor zu setzen
-			noAttractor = false;
-			deleteAttractor = false;
-			tornadoFinished = true;
-			danke = false;
-			break;
-		case '2':
-			attractors = pixelInVector(fileImage2);
-			drawAttractor = true;		// setze des Booleans um den Bild-Attraktor zu setzen
-			noAttractor = false;
-			deleteAttractor = false;
-			tornadoFinished = true;
-			danke = false;
-			break;
-		case '3':
-			attractors = pixelInVector(fileImage3);
-			drawAttractor = true;		// setze des Booleans um den Bild-Attraktor zu setzen
-			noAttractor = false;
-			deleteAttractor = false;
-			tornadoFinished = true;
-			danke = true;
-			break;
-		}
+			break;*/
+			//----------------------------------------------------------------
+						// ab hier laden der unterschiedlichen Bilder
+	case '1':
+		attractors = pixelInVector(fileImage1);
+		drawAttractor = true;		// setze des Booleans um den Bild-Attraktor zu setzen
+		noAttractor = false;
+		deleteAttractor = false;
+		tornadoFinished = true;
+		danke = false;
+		break;
+	case '2':
+		attractors = pixelInVector(fileImage2);
+		drawAttractor = true;		// setze des Booleans um den Bild-Attraktor zu setzen
+		noAttractor = false;
+		deleteAttractor = false;
+		tornadoFinished = true;
+		danke = false;
+		break;
+	case '3':
+		attractors = pixelInVector(fileImage3);
+		drawAttractor = true;		// setze des Booleans um den Bild-Attraktor zu setzen
+		noAttractor = false;
+		deleteAttractor = false;
+		tornadoFinished = true;
+		danke = true;
+		break;
+	}
+}
+
+//--------------------------------------------------------------
+void ofApp::startTornado() {
+	status = 0;
+	tornadoStartTime = time;
+	for (int p = 0; p < system.size(); p++) {
+		particle02* partikel = system.at(p);
+		partikel->startTornado();
 	}
 
-	//--------------------------------------------------------------
-	void ofApp::startTornado() {
-		status = 0;
-		tornadoStartTime = time;
-		for (int p = 0; p < system.size(); p++) {
-			particle02* partikel = system.at(p);
-			partikel->startTornado();
-		}
+}
 
-	}
-
-	//--------------------------------------------------------------
-	void ofApp::updateTornado() {
-		switch (status) {
-		case 0:
-			if ((time - tornadoStartTime) > 1.9) {
-				status = 1;
-				for (int p = 0; p < system.size(); p++) {
-					particle02* partikel = system.at(p);
-					partikel->startStage1();
-				}
-			}
-			break;
-		case 1:
-			if ((time - tornadoStartTime) > 20) {
-				status = -1;
-			}
+//--------------------------------------------------------------
+void ofApp::updateTornado() {
+	switch (status) {
+	case 0:
+		if ((time - tornadoStartTime) > 1.9) {
+			status = 1;
 			for (int p = 0; p < system.size(); p++) {
 				particle02* partikel = system.at(p);
-				partikel->updateStage1();
+				partikel->startStage1();
 			}
-			break;
-			//        case 2:
-			//            if ((pos.y ))
 		}
+		break;
+	case 1:
+		if ((time - tornadoStartTime) > 20) {
+			status = -1;
+		}
+		for (int p = 0; p < system.size(); p++) {
+			particle02* partikel = system.at(p);
+			partikel->updateStage1();
+		}
+		break;
 	}
+}
 
-	//--------------------------------------------------------------
-	void ofApp::mouseMoved(int x, int y) {
+//--------------------------------------------------------------
+void ofApp::mouseMoved(int x, int y) {
 
-	}
+}
 
-	//--------------------------------------------------------------
-	void ofApp::mouseDragged(int x, int y, int button) {
+//--------------------------------------------------------------
+void ofApp::mouseDragged(int x, int y, int button) {
 
-	}
+}
 
-	//--------------------------------------------------------------
-	void ofApp::mousePressed(int x, int y, int button) {
+//--------------------------------------------------------------
+void ofApp::mousePressed(int x, int y, int button) {
 
-	}
+}
 
-	//--------------------------------------------------------------
-	void ofApp::mouseReleased(int x, int y, int button) {
+//--------------------------------------------------------------
+void ofApp::mouseReleased(int x, int y, int button) {
 
-	}
+}
 
-	//--------------------------------------------------------------
-	void ofApp::mouseEntered(int x, int y) {
+//--------------------------------------------------------------
+void ofApp::mouseEntered(int x, int y) {
 
-	}
+}
 
-	//--------------------------------------------------------------
-	void ofApp::mouseExited(int x, int y) {
+//--------------------------------------------------------------
+void ofApp::mouseExited(int x, int y) {
 
-	}
+}
 
-	//--------------------------------------------------------------
-	void ofApp::windowResized(int w, int h) {
+//--------------------------------------------------------------
+void ofApp::windowResized(int w, int h) {
 
-	}
+}
 
-	//--------------------------------------------------------------
-	void ofApp::gotMessage(ofMessage msg) {
+//--------------------------------------------------------------
+void ofApp::gotMessage(ofMessage msg) {
 
-	}
+}
 
-	//--------------------------------------------------------------
-	void ofApp::dragEvent(ofDragInfo dragInfo) {
+//--------------------------------------------------------------
+void ofApp::dragEvent(ofDragInfo dragInfo) {
 
-	}
+}
