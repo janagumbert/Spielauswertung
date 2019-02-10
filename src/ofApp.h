@@ -49,6 +49,7 @@ private:
 	bool noAttractor;
 	bool tornadoFinished;
 	bool tornadoStarted;
+	bool danke;
 
 
 	//------------------------------------------
