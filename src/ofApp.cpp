@@ -9,7 +9,7 @@ void ofApp::setup() {
 	ofSetFrameRate(60);
 	maxParticle = 50;
 	birthCnt = 0;
-	parAmount = 30;
+	parAmount = 10;
 	tornadoStartTime = -1000;
 	time = 0;
 	status = -1;
